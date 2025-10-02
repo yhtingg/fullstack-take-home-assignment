@@ -4,9 +4,9 @@
 
 Your task is to build a cryptocurrency market data dashboard that reproduces the provided screenshot using Next.js app router (mandatory). 
 
-<img src="./mockup.png" alt="mockup" />
+<img src="./mockup.png" alt="mockup" style="border-radius:2rem;" />
 
-The application should demonstrate proficiency in server-side rendering, client-side interactivity, and production readiness.
+The application should demonstrate proficiency in server-side rendering, client-side interactivity, and production readiness. Build it as if it was the start of a bigger project you would expand on in the feature.
 
 Feel free to use any library you see fit, as long as you can justify their use.
 
