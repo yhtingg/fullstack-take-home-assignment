@@ -1,8 +1,10 @@
-<img src="./logo.svg" />
+<img src="./logo.svg" alt="Boundless" />
 
 # Fullstack take-home assignment (Next.js)
 
 Your task is to build a cryptocurrency market data dashboard that reproduces the provided screenshot using Next.js app router (mandatory). 
+
+<img src="./mockup.png" alt="mockup" />
 
 The application should demonstrate proficiency in server-side rendering, client-side interactivity, and production readiness.
 
