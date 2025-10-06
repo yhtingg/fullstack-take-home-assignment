@@ -41,7 +41,7 @@ You can use any cryptocurrency API. Some suggestions:
 
 **Architecture**:
 - Proper separation of concerns
-- Scalable project structure
+- Scalable project structure (how hard is it to expand the price breakdown to other tokens)
 
 **Production readiness**:
 - Error handling and edge cases
