@@ -56,6 +56,13 @@ You can use any cryptocurrency API. Some suggestions:
 
 Feel free to implement any other feature or improvement you see fit. If you see something in the design that doesn't make sense or could be improved, do not hesitate to change it. The provided mockup is provided as inspiration. 
 
+Ideas:
+- Add wallet connection and show the user's balance in the specific token they are looking at
+- Add a second line on the graph that shows the price of bitcoin as a comparison
+- Toggle for candlestick view
+- Show major news and events related to token price ups and downs
+- Etc.
+
 ### Time limit
 
 This should take around **3-4 hours** of development time max. We want this to be reflected in the commits.
