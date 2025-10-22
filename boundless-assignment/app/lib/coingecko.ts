@@ -29,9 +29,8 @@ function buildHeaders() {
     Accept: "application/json",
   };
   const key = process.env.COINGECKO_API_KEY;
-  console.log("key", key)
   if (key) {
-    headers["X-CG-API-KEY"] = key;
+    headers["X-CG-PRO-API-KEY"] = key;
   }
   return headers;
 }
