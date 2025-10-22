@@ -28,7 +28,7 @@ export function initChart(container: HTMLElement, initialData: LineData[]) {
     if (!externalRangeChange) userInteracted = true;
   });
 
-  lockEdges();
+  // lockEdges();
 
   function updateData(newData: LineData[], shouldFitContent = false) {
     series.setData(newData);
