@@ -3,6 +3,7 @@ import {
     ISeriesApi,
     LineData,
     LineSeries,
+    UTCTimestamp,
 } from 'lightweight-charts';
 
 type ChartSeries = ISeriesApi<'Line'>;
@@ -70,15 +71,15 @@ export function initChart(container: HTMLElement, initialData: LineData[]) {
       let { from, to } = newRange;
 
       // Prevent scrolling before first point
-      if (from < firstTime) {
-        from = firstTime;
-        to = from + (newRange.to - newRange.from);
+      if ((from as UTCTimestamp) < firstTime) {
+        from = firstTime as UTCTimestamp;
+        to = (firstTime + ((to as UTCTimestamp) - (from as UTCTimestamp))) as UTCTimestamp;
       }
 
       // Prevent scrolling after last point
-      if (to > lastTime) {
-        to = lastTime;
-        from = to - (newRange.to - newRange.from);
+      if ((to as UTCTimestamp) > lastTime) {
+        to = lastTime as UTCTimestamp;
+        from = (lastTime - ((to as UTCTimestamp) - (from as UTCTimestamp))) as UTCTimestamp;
       }
 
       // Apply adjusted range
