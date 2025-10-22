@@ -30,7 +30,7 @@ function buildHeaders() {
   };
   const key = process.env.COINGECKO_API_KEY;
   if (key) {
-    headers["X-CG-PRO-API-KEY"] = key;
+    headers["X-CG-DEMO-API-KEY"] = key;
   }
   return headers;
 }
