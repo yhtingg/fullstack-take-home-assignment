@@ -12,6 +12,7 @@ interface Props {
 export default function ChartClient({ coinId, initialData }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ReturnType<typeof initChart> | null>(null);
+  const [range, setRange] = useState<"1h" | "1w" | "1m" | "3m" | "6m" | "1y" | "all">("1h");
   const [data, setData] = useState(initialData);
 
   useEffect(() => {
@@ -23,6 +24,15 @@ export default function ChartClient({ coinId, initialData }: Props) {
       chartRef.current?.destroy();
     };
   }, [initialData]);
+
+  const handleRangeChange = async (newRange: typeof range) => {
+    setRange(newRange);
+    const res = await fetch(`/api/chart?coin=${coinId}&range=${newRange}`);
+    if (!res.ok) return;
+    const newData: LineData[] = await res.json();
+    setData(newData);
+    chartRef.current?.updateData(newData);
+  };
 
   // Refresh data every 30 seconds if someone is on it
   useEffect(() => {
@@ -53,5 +63,24 @@ export default function ChartClient({ coinId, initialData }: Props) {
     };
   }, [coinId]);
 
-  return <div ref={containerRef} className="w-full h-[300px]" />;
+  return (
+    <div className="flex flex-col gap-3">
+      <div ref={containerRef} className="w-full h-[300px]" />
+      <div className="flex gap-2 mb-2">
+        {["1h", "1w", "1m", "3m", "6m", "1y", "all"].map((r) => (
+          <button
+            key={r}
+            onClick={() => handleRangeChange(r as typeof range)}
+            className={`px-3 py-1 cursor-pointer rounded ${
+              range === r ?
+                "bg-blue-600 hover:bg-blue-700 text-white"
+                : "bg-gray-200 hover:bg-gray-300 text-black"
+            }`}
+          >
+            {r.toUpperCase()}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }
