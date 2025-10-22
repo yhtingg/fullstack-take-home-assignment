@@ -13,7 +13,6 @@ export default function ChartClient({ coinId, initialData }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ReturnType<typeof initChart> | null>(null);
   const [range, setRange] = useState<"1h" | "1w" | "1m" | "3m" | "6m" | "1y" | "all">("1h");
-  // const [data, setData] = useState(initialData);
 
   const rangeToDays: Record<string, string> = {
     "1h": "0.0417",
@@ -40,18 +39,16 @@ export default function ChartClient({ coinId, initialData }: Props) {
     setRange(newRange);
     const res = await fetch(`/api/chart?coin=${coinId}&days=${rangeToDays[newRange]}`);
     if (!res.ok) return;
-    const newData: LineData[] = await res.json();
-    // setData(newData);
-    chartRef.current?.updateData(newData);
+    const json = await res.json();
+    chartRef.current?.updateData(json.chart);
   };
 
   // Refresh data every 30 seconds if someone is on it
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`https://fullstack-take-home-assignment.vercel.app/coins/ethereum/api/chart?coin=${coinId}&days=1`);
-      const newData = await res.json();
-      // setData(newData);
-      chartRef.current?.series?.setData?.(newData);
+      const res = await fetch(`/api/chart?coin=${coinId}&days=1`);
+      const json = await res.json();
+      chartRef.current?.updateData(json.chart);
     };
 
     let interval: NodeJS.Timeout | null = null;
