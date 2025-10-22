@@ -1,11 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Stat from "./Stat";
 import { CoinDetails } from "@/lib/coingecko";
 
 export default function Client({ details }: { details: CoinDetails }) {
   const [data, setData] = useState(details);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function refresh() {
+      setLoading(true);
+      const res = await fetch("https://api.coingecko.com/api/v3/coins/ethereum");
+      if (res.ok) {
+        const json = await res.json();
+        setData(json);
+      }
+      setLoading(false);
+    }
+
+    // Fetch immediately and every 30s
+    const interval = setInterval(refresh, 30_000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="mt-5">
