@@ -18,6 +18,7 @@ export function initChart(container: HTMLElement, initialData: LineData[]) {
 
   const series: ChartSeries = chart.addSeries(LineSeries);
   series.setData(initialData);
+  chart.timeScale().fitContent();
   lockEdges(series);
 
   let userInteracted = false;
@@ -27,19 +28,16 @@ export function initChart(container: HTMLElement, initialData: LineData[]) {
     userInteracted = true;
   });
 
-  function updateData(newData: LineData[]) {
+  function updateData(newData: LineData[], shouldFitContent = false) {
     series.setData(newData);
-    lockEdges(series);
 
     // Auto-scale y-axis based on visible data
     chart.priceScale('right').applyOptions({ autoScale: true });
 
     // Lock x-axis if user hasn't interacted
-    if (!userInteracted) {
-      const visibleRange = chart.timeScale().getVisibleRange();
-      if (visibleRange) {
-        chart.timeScale().setVisibleRange(visibleRange);
-      }
+    if (shouldFitContent) {
+      chart.timeScale().fitContent();
+      userInteracted = false;
     }
   }
 

@@ -41,7 +41,7 @@ export default function ChartClient({ coinId, initialData }: Props) {
     const res = await fetch(`/api/chart?coin=${coinId}&days=${rangeToDays[newRange]}`);
     if (!res.ok) return;
     const json = await res.json();
-    chartRef.current?.updateData(json.chart);
+    chartRef.current?.updateData(json.chart, true);
   };
 
   // Refresh data every 30 seconds if someone is on it
