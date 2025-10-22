@@ -6,13 +6,15 @@ export const revalidate = 30;
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const coin = searchParams.get("coin") || "ethereum";
-  const days = searchParams.get("days") || "1";
+  const daysParam = searchParams.get("days") || "1";
   const vs_currency = searchParams.get("vs_currency") || "usd";
+
+  const days: number | "max" = daysParam === "max" ? "max" : Number(daysParam);
 
   try {
     const [details, chart] = await Promise.all([
       fetchCoinDetails(coin, vs_currency),
-      fetchMarketChart(coin, vs_currency, Number(days)),
+      fetchMarketChart(coin, vs_currency, days),
     ]);
 
     return NextResponse.json({ details, chart }, {

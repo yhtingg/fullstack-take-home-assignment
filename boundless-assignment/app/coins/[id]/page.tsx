@@ -21,8 +21,7 @@ export default async function CoinPage({ params }: { params: { id: string } }) {
       <h3 className={percentageDiff >= 0 ? "text-green-700" : "text-red-700"}>
         {percentageDiff >= 0 ? "+" : ""}
         {percentageDiff.toFixed(2)}%</h3>
-
-      <Chart coinId={params.id} initialData={chartData} />
+      <Chart coinId={id} initialData={chartData} />
       <Client details={details} />
     </div>
   );

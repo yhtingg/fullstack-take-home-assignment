@@ -13,7 +13,18 @@ export default function ChartClient({ coinId, initialData }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ReturnType<typeof initChart> | null>(null);
   const [range, setRange] = useState<"1h" | "1w" | "1m" | "3m" | "6m" | "1y" | "all">("1h");
-  const [data, setData] = useState(initialData);
+  // const [data, setData] = useState(initialData);
+
+  const rangeToDays: Record<string, string> = {
+    "1h": "0.0417",
+    "1d": "1",
+    "1w": "7",
+    "1m": "30",
+    "3m": "90",
+    "6m": "180",
+    "1y": "365",
+    "all": "max",
+  };
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -27,10 +38,10 @@ export default function ChartClient({ coinId, initialData }: Props) {
 
   const handleRangeChange = async (newRange: typeof range) => {
     setRange(newRange);
-    const res = await fetch(`/api/chart?coin=${coinId}&range=${newRange}`);
+    const res = await fetch(`/api/chart?coin=${coinId}&days=${rangeToDays[newRange]}`);
     if (!res.ok) return;
     const newData: LineData[] = await res.json();
-    setData(newData);
+    // setData(newData);
     chartRef.current?.updateData(newData);
   };
 
@@ -39,7 +50,7 @@ export default function ChartClient({ coinId, initialData }: Props) {
     const fetchData = async () => {
       const res = await fetch(`https://fullstack-take-home-assignment.vercel.app/coins/ethereum/api/chart?coin=${coinId}&days=1`);
       const newData = await res.json();
-      setData(newData);
+      // setData(newData);
       chartRef.current?.series?.setData?.(newData);
     };
 
@@ -67,7 +78,7 @@ export default function ChartClient({ coinId, initialData }: Props) {
     <div className="flex flex-col gap-3">
       <div ref={containerRef} className="w-full h-[300px]" />
       <div className="flex gap-2 mb-2">
-        {["1h", "1w", "1m", "3m", "6m", "1y", "all"].map((r) => (
+        {Object.keys(rangeToDays).map((r) => (
           <button
             key={r}
             onClick={() => handleRangeChange(r as typeof range)}
