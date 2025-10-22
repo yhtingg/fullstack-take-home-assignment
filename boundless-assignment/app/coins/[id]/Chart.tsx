@@ -12,7 +12,6 @@ interface Props {
 export default function ChartClient({ coinId, initialData }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ReturnType<typeof initChart> | null>(null);
-  const [range, setRange] = useState<"1h" | "1w" | "1m" | "3m" | "6m" | "1y" | "all">("1h");
 
   const rangeToDays: Record<string, string> = {
     "1h": "0.0417",
@@ -24,6 +23,8 @@ export default function ChartClient({ coinId, initialData }: Props) {
     "1y": "365",
     "all": "max",
   };
+  
+  const [range, setRange] = useState<keyof typeof rangeToDays>("1d");
 
   useEffect(() => {
     if (!containerRef.current) return;

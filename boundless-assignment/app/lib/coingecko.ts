@@ -27,6 +27,7 @@ export interface MarketData {
 export async function fetchMarketChart(coinId: string, vsCurrency = "usd", days: number | "max" = 1): Promise<LineData[]> {
   const url = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=${vsCurrency}&days=${days}`;
   const res = await fetch(url);
+  if (!res.ok) console.log("market chart", res)
   if (!res.ok) throw new Error("Failed to fetch market chart");
   const data = await res.json();
 
@@ -39,6 +40,7 @@ export async function fetchMarketChart(coinId: string, vsCurrency = "usd", days:
 export async function fetchCoinDetails(coinId: string, vsCurrency = "usd"): Promise<CoinDetails> {
   const url = `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`;
   const res = await fetch(url);
+  if (!res.ok) console.log("coin details", res)
   if (!res.ok) throw new Error("Failed to fetch coin details");
   const json = await res.json();
   if (!json.market_data.price_change_percentage_24h_in_currency[vsCurrency]) {
