@@ -19,46 +19,43 @@ export function initChart(container: HTMLElement, initialData: LineData[]) {
   const series: ChartSeries = chart.addSeries(LineSeries);
   series.setData(initialData);
   chart.timeScale().fitContent();
-  lockEdges(series);
 
   let userInteracted = false;
+  let externalRangeChange = false;
 
   // Track if user zooms/pans
   chart.timeScale().subscribeVisibleTimeRangeChange(() => {
-    userInteracted = true;
+    if (!externalRangeChange) userInteracted = true;
   });
+
+  lockEdges();
 
   function updateData(newData: LineData[], shouldFitContent = false) {
     series.setData(newData);
-
-    // Auto-scale y-axis based on visible data
     chart.priceScale('right').applyOptions({ autoScale: true });
 
-    // Lock x-axis if user hasn't interacted
     if (shouldFitContent) {
-      chart.timeScale().fitContent();
-      userInteracted = false;
+      externalRangeChange = true;
+      setTimeout(() => {
+        chart.timeScale().fitContent();
+        userInteracted = false;
+        externalRangeChange = false;
+      }, 0);
     }
   }
 
-  // Handle window resize
   function handleResize() {
     chart.applyOptions({ width: container.clientWidth, height: container.clientHeight });
-
-    // Lock x-axis if user hasn't interacted
     if (!userInteracted) {
-      const visibleRange = chart.timeScale().getVisibleRange();
-      if (visibleRange) {
-        chart.timeScale().setVisibleRange(visibleRange);
-      }
+      chart.timeScale().fitContent();
     }
   }
 
-  function lockEdges(series: ChartSeries) {
-    const data = series.data(); // get current series data
+  function lockEdges() {
+    const data = series.data();
     if (!data.length) return;
 
-    const firstTime = data[0].time as number; // assuming UTCTimestamp
+    const firstTime = data[0].time as number;
     const lastTime = data[data.length - 1].time as number;
 
     const timeScale = chart.timeScale();
@@ -80,7 +77,6 @@ export function initChart(container: HTMLElement, initialData: LineData[]) {
         from = (lastTime - ((to as UTCTimestamp) - (from as UTCTimestamp))) as UTCTimestamp;
       }
 
-      // Apply adjusted range
       timeScale.setVisibleRange({ from, to });
     });
   }
